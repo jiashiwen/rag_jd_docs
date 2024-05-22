@@ -1,6 +1,9 @@
 # ToDo
 
-- 将获取prompt 和 通过llm 推理拆成两个服务
+- [x] 将获取prompt 和 通过llm 推理拆成两个服务
+- [] retriever 是否支持分值
+- [ ] langchain 按 token输出
+
 
 
 

@@ -1,4 +1,3 @@
-from langchain_community.llms import VLLM
 from fastapi import FastAPI
 from pydantic import BaseModel
 from langchain_community.llms import VLLM
@@ -6,9 +5,18 @@ from transformers import AutoTokenizer
 from langchain.prompts import PromptTemplate
 import requests
 import uvicorn
+import json
+import logging
 
 app = FastAPI()
+app = FastAPI(docs_url=None)
 app.host = "0.0.0.0"
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+to_console = logging.StreamHandler()
+logger.addHandler(to_console)
+
 
 # load model
 # model_name = "/root/models/Llama3-Chinese-8B-Instruct"
@@ -43,8 +51,8 @@ prompt = PromptTemplate(
 )
 
 
-def get_context(q: str):
-    url = "http://10.0.0.7:8000/retriver"
+def get_context_list(q: str):
+    url = "http://10.0.0.7:8000/retriever"
     payload = {"content": q}
     res = requests.post(url, json=payload)
     return res.text
@@ -61,12 +69,27 @@ async def root():
 
 @app.post("/answer")
 async def answer(q: question):
+    logger.info("invoke!!!")
     global prompt
     global llm_llama3
-    context_content = get_context(q.content)
-    p = prompt.format(context=context_content, question=q.content)
-    result = llm_llama3(p)
-    return result.replace("\n", "")
+    context_list_str = get_context_list(q.content)
+
+    context_list = json.loads(context_list_str)
+    context = ""
+    source_list = []
+
+    for context_json in context_list:
+        context = context+context_json["page_content"]
+        source_list.append(context_json["metadata"]["source"])
+    p = prompt.format(context=context, question=q.content)
+    answer = llm_llama3(p)
+    result = {
+        # "answer": answer.replace("\n", ""),
+        "answer": answer,
+        "sources": source_list
+    }
+    # return answer.replace("\n", "")
+    return result
 
 
 if __name__ == '__main__':
