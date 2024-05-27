@@ -39,12 +39,15 @@ class JD_DOC_Loader(BaseLoader):
     def lazy_load(self) -> Iterator[Document]:
         """Load from file path."""
         text = ""
-        from_url = ""        
+        from_url = ""
         try:
-            with open(self.file_path, encoding=self.encoding) as f:                
+            with open(self.file_path, encoding=self.encoding) as f:
                 doc_data = json.load(f)
-                text = doc_data["content"]           
+                text = doc_data["content"]
+                title = doc_data["title"]
+                product = doc_data["product"]
                 from_url = doc_data["url"]
+
                 # text = f.read()
         except UnicodeDecodeError as e:
             if self.autodetect_encoding:
@@ -62,5 +65,5 @@ class JD_DOC_Loader(BaseLoader):
         except Exception as e:
             raise RuntimeError(f"Error loading {self.file_path}") from e
         # metadata = {"source": str(self.file_path)}
-        metadata = {"source": from_url}
+        metadata = {"source": from_url, "title": title, "product": product}
         yield Document(page_content=text, metadata=metadata)

@@ -1,34 +1,3 @@
-# import json
-# import gradio as gr
-# import requests
-
-
-# def greet(name, intensity):
-#     return "Hello, " + name + "!" * int(intensity)
-
-
-# def answer(question):
-#     url = "http://114.67.87.223:8888/answer"
-#     payload = {"content": question}
-#     res = requests.post(url, json=payload)
-#     res_json = json.loads(res.text)
-#     return [res_json["answer"], res_json["sources"]]
-
-
-# demo = gr.Interface(
-#     fn=answer,
-#     # inputs=["text", "slider"],
-#     inputs=[gr.Textbox(label="question", lines=5)],
-#     # outputs=[gr.TextArea(label="answer", lines=5),
-#     #          gr.JSON(label="urls", value=list)]
-#     outputs=[gr.Markdown(label="answer"),
-#              gr.JSON(label="urls", value=list)]
-# )
-
-
-# demo.launch(server_name="0.0.0.0")
-
-
 import json
 import gradio as gr
 from threading import Thread
@@ -40,16 +9,6 @@ model_id = "/root/models/Qwen1.5-1.8B-Chat"
 model = AutoModelForCausalLM.from_pretrained(model_id)
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 
-# prompt
-# prompt_template = """
-# 你是一个云技术专家
-# 使用以下检索到的Context回答问题。
-# 如果不知道答案，就说不知道。
-# 用中文回答问题。
-# Question: {question}
-# Context: {context}
-# Answer:
-# """
 
 prompt_template = """
 你是一个京东云的云计算专家
@@ -61,10 +20,6 @@ prompt = PromptTemplate(
     input_variables=["context"],
     template=prompt_template,
 )
-# prompt = PromptTemplate(
-#     input_variables=["context", "question"],
-#     template=prompt_template,
-# )
 
 
 def get_context_list(q: str):
@@ -75,6 +30,8 @@ def get_context_list(q: str):
 
 
 def question_answer(query):
+    global tokenizer
+    global model
     context_list_str = get_context_list(query)
     context_list = json.loads(context_list_str)
     context = ""
@@ -92,11 +49,13 @@ def question_answer(query):
     encoding = tokenizer(conversion, return_tensors="pt")
     streamer = TextIteratorStreamer(tokenizer)
     generation_kwargs = dict(encoding, streamer=streamer,
-                             max_new_tokens=200, do_sample=True, temperature=0.2)
+                             max_new_tokens=700, do_sample=True, temperature=0.2)
+
     thread = Thread(target=model.generate, kwargs=generation_kwargs)
     thread.start()
 
-    generate_text = ''
+    generate_text = '参考文档：'+"\n" + \
+        ''.join('- '+str(e)+"\n" for e in source_list)+"\n"
     for new_text in streamer:
         output = new_text.replace(conversion, '')
         if output:

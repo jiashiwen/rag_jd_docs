@@ -1,0 +1,2 @@
+question,answer,urls,flag,username,timestamp
+欠费了怎么办,如果欠费金额达到600元及以上（若首次欠费金额直接超过600元，将直接做停服处理），欠费时间达到24小时及以上，京东云会停止当前账户的CDN加速服务，此时您的所有CDN加速域名将全部被系统停用，访问全部回源处理，且您无法再进行配置修改等操作。欠费停服规则包括欠费金额达到600元及以上、欠费时间达到24小时及以上两个条件。在欠费情况下进行充值，充值金额立即到账，之后系统会自动结算欠款账单，账号状态正常后CDN账号不会自动启用服务，需要您提交工单申请重新启用CDN服务，重启后再根据需求自主对域名进行启用。,"[""https://docs.jdcloud.com/cn/cloud-file-service/owe-remind"", ""https://docs.jdcloud.com/cn/container-registry/renew-process"", ""https://docs.jdcloud.com/cn/cdn/arrears""]",,,2024-05-24 15:34:54.924443

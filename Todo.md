@@ -1,8 +1,11 @@
 # ToDo
 
 - [x] 将获取prompt 和 通过llm 推理拆成两个服务
-- [] retriever 是否支持分值
+- [ ] retriever 支持分值
 - [ ] langchain 按 token输出
+- [ ] 验证使用公共大模型api
+- [ ] 数据细粒度切分，验证MarkdownHeaderTextSplitter
+- [ ] rerank 理解与应用
 
 
 
