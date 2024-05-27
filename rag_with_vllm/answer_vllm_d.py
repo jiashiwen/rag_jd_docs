@@ -106,7 +106,7 @@ async def answer(q: question):
     answer = llm_llama3.generate(p, sampling_params)
     result = {
         # "answer": answer.replace("\n", ""),
-        "answer": answer,
+        "answer": answer[0].outputs[0].text,
         "sources": source_list
     }
     # return answer.replace("\n", "")
