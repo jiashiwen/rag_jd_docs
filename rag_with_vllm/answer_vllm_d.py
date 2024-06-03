@@ -72,7 +72,7 @@ prompt = PromptTemplate(
 
 
 def get_context_list(q: str):
-    url = "http://10.0.0.7:8000/retriever"
+    url = "http://127.0.0.1:8000/retriever"
     payload = {"content": q}
     res = requests.post(url, json=payload)
     return res.text

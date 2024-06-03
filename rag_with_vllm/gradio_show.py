@@ -8,7 +8,7 @@ def greet(name, intensity):
 
 
 def answer(question):
-    url = "http://114.67.87.223:8888/answer"
+    url = "http://127.0.0.1:8888/answer"
     payload = {"content": question}
     res = requests.post(url, json=payload)
     res_json = json.loads(res.text)
