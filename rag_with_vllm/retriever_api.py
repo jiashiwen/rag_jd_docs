@@ -14,7 +14,7 @@ model_kwargs = {"device": "cuda"}
 embeddings = HuggingFaceEmbeddings(
     model_name="/root/models/moka-ai-m3e-large", model_kwargs=model_kwargs)
 settings = clickhouse.ClickhouseSettings(
-    table="jd_docs_m3e_with_url_splited", username="default", password="Git785230", host="10.0.1.94")
+    table="jd_docs_m3e_with_url", username="default", password="Git785230", host="10.0.1.94")
 ck_db = clickhouse.Clickhouse(embeddings, config=settings)
 ck_retriever = ck_db.as_retriever(
     search_type="similarity", search_kwargs={"k": 3})

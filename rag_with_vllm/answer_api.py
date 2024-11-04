@@ -19,8 +19,9 @@ logger.addHandler(to_console)
 
 
 # load model
-# model_name = "/root/models/Llama3-Chinese-8B-Instruct"
-model_name = "/root/models/Qwen1.5-1.8B-Chat"
+# model_name = "/root/Qwen2-1.5B"
+model_name = "/root/Qwen1.5-1.8B-Chat"
+
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 llm_llama3 = VLLM(
     model=model_name,
